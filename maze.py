@@ -30,6 +30,11 @@ def get_shape(maze, x, y):
     cols = len(maze)
     rows = len(maze[0])
 
+    if x == 0 and y == 0: shape.up = shape.right = True
+    if x == 0 and y == rows - 1: shape.down = shape.right = True
+    if x == cols - 1 and y == 0: shape.up = shape.left = True
+    if x == cols - 1 and y == rows - 1: shape.down = shape.left = True
+
     if y + 1 < rows and maze[x][y+1] == val: shape.up = True
     if y > 0 and maze[x][y-1] == val: shape.down = True
     if x > 0 and maze[x-1][y] == val: shape.left = True

@@ -141,6 +141,34 @@ class CellToStringTest(unittest.TestCase):
                 [0, 0, 0, 0]]
         self.assertEqual(cell_to_string(maze, x = 1, y = 1), '───')
 
+    def test_top_left_corner(self):
+        maze = [[0, 0, 0, 1],
+                [0, 0, 0, 1],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 0, y = 3), ' ┌─')
+
+    def test_top_right_corner(self):
+        maze = [[0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 1, 1]]
+        self.assertEqual(cell_to_string(maze, x = 3, y = 3), '─┐ ')
+
+    def test_bottom_left_corner(self):
+        maze = [[1, 1, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 0, y = 0), ' └─')
+
+    def test_bottom_right_corner(self):
+        maze = [[0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [1, 0, 0, 0],
+                [1, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 3, y = 0), '─┘ ')
+
 class MazeToStringTest(unittest.TestCase):
 
     def test_empty_maze(self):
