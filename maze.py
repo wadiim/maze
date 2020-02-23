@@ -45,3 +45,11 @@ def cell_to_string(maze, x, y):
 
     if shape.up or shape.down: return ' │ '
     if shape.left or shape.right: return '───'
+
+def maze_to_string(maze):
+    cols = len(maze)
+    rows = len(maze[0])
+
+    return '\n'.join([''.join([str(cell_to_string(maze, x, y))
+           for x in range(cols)])
+           for y in range(rows-1, -1, -1)])

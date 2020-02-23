@@ -1,4 +1,4 @@
-from maze import Shape, get_shape, cell_to_string
+from maze import Shape, get_shape, cell_to_string, maze_to_string
 import unittest
 
 class GetShapeTest(unittest.TestCase):
@@ -140,6 +140,44 @@ class CellToStringTest(unittest.TestCase):
                 [0, 1, 0, 0],
                 [0, 0, 0, 0]]
         self.assertEqual(cell_to_string(maze, x = 1, y = 1), '───')
+
+class MazeToStringTest(unittest.TestCase):
+
+    def test_empty_maze(self):
+        maze = [[0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        str = ("            \n"
+               "            \n"
+               "            \n"
+               "            ")
+        self.assertEqual(maze_to_string(maze), str)
+
+    def test_complex_maze(self):
+        maze = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+                [1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0],
+                [1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1],
+                [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
+                [1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+                [1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+                [0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+        str = (" ┌────    ┌──────────────┬─────┐ \n"
+               " │        │              │     │ \n"
+               " ├────    │     ┌────    │     │ \n"
+               " │              │              │ \n"
+               " │     ┌────────┴──┐    ───────┤ \n"
+               " │     │           │           │ \n"
+               " │     │     │     │     │     │ \n"
+               " │           │     ├─────┼─────┤ \n"
+               " │     ┌─────┘     │     │     │ \n"
+               " │     │                       │ \n"
+               " └─────┴────────────────   ────┘ ")
+        self.assertEqual(maze_to_string(maze), str)
 
 if __name__ == '__main__':
     unittest.main()
