@@ -38,9 +38,10 @@ def cell_to_string(maze, x, y):
     if shape.down and shape.left and shape.right: return '─┬─'
     if shape.up and shape.left and shape.right: return '─┴─'
 
-    if shape.up and shape.down: return ' │ '
-    if shape.left and shape.right: return '───'
     if shape.down and shape.right: return ' ┌─'
     if shape.down and shape.left: return '─┐ '
     if shape.up and shape.right: return ' └─'
     if shape.up and shape.left: return '─┘ '
+
+    if shape.up or shape.down: return ' │ '
+    if shape.left or shape.right: return '───'
