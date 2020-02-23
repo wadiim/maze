@@ -95,4 +95,5 @@ def make_maze(rows, cols):
                 dx, dy = Cell.directions[key]
                 if grid[i][j].walls[key]: continue
                 maze[2*i + 1 + dx][2*j +1 + dy] = 0
+    maze[-2][0] = maze[0][-2] = 0
     return maze
