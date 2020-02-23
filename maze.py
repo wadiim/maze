@@ -25,3 +25,22 @@ def get_shape(maze, x, y):
     if x + 1 < cols and maze[x+1][y] == val: shape.right = True
 
     return shape
+
+def cell_to_string(maze, x, y):
+    if maze[x][y] == 0: return '   '
+
+    shape = get_shape(maze, x, y)
+
+    if shape.up and shape.down and shape.left and shape.right: return '─┼─'
+
+    if shape.up and shape.down and shape.right: return ' ├─'
+    if shape.up and shape.down and shape.left: return '─┤ '
+    if shape.down and shape.left and shape.right: return '─┬─'
+    if shape.up and shape.left and shape.right: return '─┴─'
+
+    if shape.up and shape.down: return ' │ '
+    if shape.left and shape.right: return '───'
+    if shape.down and shape.right: return ' ┌─'
+    if shape.down and shape.left: return '─┐ '
+    if shape.up and shape.right: return ' └─'
+    if shape.up and shape.left: return '─┘ '

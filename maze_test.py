@@ -1,4 +1,4 @@
-from maze import Shape, get_shape
+from maze import Shape, get_shape, cell_to_string
 import unittest
 
 class GetShapeTest(unittest.TestCase):
@@ -26,6 +26,92 @@ class GetShapeTest(unittest.TestCase):
                 [1, 7, 1, 3]]
         shape = Shape(up = True, down = True, right = True)
         self.assertEqual(get_shape(maze, x = 1, y = 1), shape)
+
+class CellToStringTest(unittest.TestCase):
+
+    def test_empty_cell(self):
+        maze = [[0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '   ')
+
+    def test_horizontal(self):
+        maze = [[0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '───')
+
+    def test_vertical(self):
+        maze = [[0, 0, 0, 0],
+                [1, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), ' │ ')
+
+    def test_down_and_right(self):
+        maze = [[0, 0, 0, 0],
+                [1, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), ' ┌─')
+
+    def test_down_and_left(self):
+        maze = [[0, 1, 0, 0],
+                [1, 1, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '─┐ ')
+
+    def test_up_and_right(self):
+        maze = [[0, 0, 0, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), ' └─')
+
+    def test_up_and_left(self):
+        maze = [[0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '─┘ ')
+
+    def test_vertical_and_right(self):
+        maze = [[0, 0, 0, 0],
+                [1, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), ' ├─')
+
+    def test_vertical_and_left(self):
+        maze = [[0, 1, 0, 0],
+                [1, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '─┤ ')
+
+    def test_down_and_horizontal(self):
+        maze = [[0, 1, 0, 0],
+                [1, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '─┬─')
+
+    def test_up_and_horizontal(self):
+        maze = [[0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '─┴─')
+
+    def test_vertical_and_horizontal(self):
+        maze = [[0, 1, 0, 0],
+                [1, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]]
+        self.assertEqual(cell_to_string(maze, x = 1, y = 1), '─┼─')
 
 if __name__ == '__main__':
     unittest.main()
