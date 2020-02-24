@@ -74,7 +74,7 @@ def is_valid(grid, x, y):
     return (x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0]) and
             grid[x][y].visited == False)
 
-def generate_maze(grid, x = 0, y = 0):
+def generate_grid(grid, x = 0, y = 0):
     grid[x][y].visited = True
     for key in random.sample(list(Cell.directions.keys()),
                              len(Cell.directions)):
@@ -82,11 +82,11 @@ def generate_maze(grid, x = 0, y = 0):
         if not is_valid(grid, x + dx, y + dy): continue
         grid[x][y].walls[key] = False
         grid[x+dx][y+dy].walls[Cell.opposite[key]] = False
-        generate_maze(grid, x + dx, y + dy)
+        generate_grid(grid, x + dx, y + dy)
 
-def make_maze(rows, cols):
+def generate_maze(rows, cols):
     grid = [[Cell() for i in range(rows)] for j in range(cols)]
-    generate_maze(grid)
+    generate_grid(grid)
     maze = [[1 for i in range(2*rows + 1)] for j in range(2*cols + 1)]
     for i in range(cols):
         for j in range(rows):
