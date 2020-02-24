@@ -84,16 +84,32 @@ def generate_grid(grid, x = 0, y = 0):
         grid[x+dx][y+dy].walls[Cell.opposite[key]] = False
         generate_grid(grid, x + dx, y + dy)
 
+def map_coord(c):
+    return 2*c + 1
+
+def grid_cell_to_maze_cell(grid, maze, x, y):
+    maze[map_coord(x)][map_coord(y)] = 0
+    for key in Cell.directions.keys():
+        dx, dy = Cell.directions[key]
+        if grid[x][y].walls[key]: continue
+        maze[map_coord(x) + dx][map_coord(y) + dy] = 0
+
+def grid_to_maze(grid, maze):
+    cols = len(grid)
+    rows = len(grid[0])
+    for i in range(cols):
+        for j in range(rows):
+            grid_cell_to_maze_cell(grid, maze, i, j)
+
+def make_entry_and_exit(maze):
+    maze[-2][0] = maze[0][-2] = 0
+
 def generate_maze(rows, cols):
     grid = [[Cell() for i in range(rows)] for j in range(cols)]
     generate_grid(grid)
-    maze = [[1 for i in range(2*rows + 1)] for j in range(2*cols + 1)]
-    for i in range(cols):
-        for j in range(rows):
-            maze[2*i + 1][2*j + 1] = 0
-            for key in Cell.directions.keys():
-                dx, dy = Cell.directions[key]
-                if grid[i][j].walls[key]: continue
-                maze[2*i + 1 + dx][2*j +1 + dy] = 0
-    maze[-2][0] = maze[0][-2] = 0
+    mrows = map_coord(rows)
+    mcols = map_coord(cols)
+    maze = [[1 for i in range(mrows)] for j in range(mcols)]
+    grid_to_maze(grid, maze)
+    make_entry_and_exit(maze)
     return maze
