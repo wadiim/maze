@@ -21,6 +21,7 @@ class Cell:
     opposite = {'N': 'S', 'S': 'N', 'W': 'E', 'E': 'W'}
 
     def __init__(self):
+        self.path = False
         self.visited = False
         self.walls = {key: True for key in Cell.directions.keys()}
 
@@ -88,18 +89,38 @@ def map_coord(c):
     return 2*c + 1
 
 def grid_cell_to_maze_cell(grid, maze, x, y):
-    maze[map_coord(x)][map_coord(y)] = 0
+    mx, my = map_coord(x), map_coord(y)
+    maze[map_coord(x)][map_coord(y)] = 0 if not grid[x][y].path else 2
     for key in Cell.directions.keys():
         dx, dy = Cell.directions[key]
         if grid[x][y].walls[key]: continue
-        maze[map_coord(x) + dx][map_coord(y) + dy] = 0
+        if (grid[x][y].path and
+            ((mx + dx == 0 or mx + dx == len(maze[0]) - 1 or
+            my + dy == 0 or my + dy == len(maze) - 1) or
+            (x + dx >= 0 and x + dx < len(grid[0]) and
+            y + dy >= 0 and y + dy < len(grid) and
+            grid[x + dx][y + dy].path))): maze[mx + dx][my + dy] = 2
+        else: maze[mx + dx][my + dy] = 0
 
-def grid_to_maze(grid, maze):
+def maze_cell_to_grid_cell(grid, maze, x, y):
+    for key in Cell.directions.keys():
+        dx, dy = Cell.directions[key]
+        if maze[map_coord(x) + dx][map_coord(y) + dy] == 1: continue
+        grid[x][y].walls[key] = False
+
+def for_each_grid_cell(grid, func, *args):
     cols = len(grid)
     rows = len(grid[0])
     for i in range(cols):
-        for j in range(rows):
-            grid_cell_to_maze_cell(grid, maze, i, j)
+        for j in range(rows): func(i, j, *args)
+
+def grid_to_maze(grid, maze):
+    for_each_grid_cell(grid,
+        lambda x, y: grid_cell_to_maze_cell(grid, maze, x, y))
+
+def maze_to_grid(grid, maze):
+    for_each_grid_cell(grid,
+        lambda x, y: maze_cell_to_grid_cell(grid, maze, x, y))
 
 def make_entry_and_exit(maze):
     maze[-2][0] = maze[0][-2] = 0
@@ -113,3 +134,38 @@ def generate_maze(rows, cols):
     grid_to_maze(grid, maze)
     make_entry_and_exit(maze)
     return maze
+
+def is_exit(grid, x, y):
+    return (is_valid(grid, x, y) and
+            x == 0 and not grid[x][y].walls['W'] or
+            x == len(grid[0]) - 1 and not grid[x][y].walls['E'] or
+            y == 0 and not grid[x][y].walls['S'] or
+            y == len(grid) - 1 and not grid[x][y].walls['N'])
+
+def solve_grid(grid, x = 0, y = 0):
+    grid[x][y].visited = True
+    for (key, val) in Cell.directions.items():
+        if grid[x][y].walls[key] == True: continue
+        dx, dy = val
+        if (not is_valid(grid, x + dx, y + dy) or
+            grid[x + dx][y + dy].visited): continue
+        if is_exit(grid, x + dx, y + dy):
+            grid[x + dx][y + dy].path = True
+            grid[x][y].path = True
+            return True
+        if solve_grid(grid, x + dx, y + dy):
+            grid[x][y].path = True
+            return True
+    return False
+
+def solve_maze(maze, x = 0, y = 0):
+    grid = [[Cell() for i in range(1, len(maze[0]), 2)]
+        for j in range(1, len(maze), 2)]
+    if len(grid[0]) == 1 or len(grid) == 1:
+        for x in range(len(maze)):
+            for y in range(len(maze[0])):
+                if maze[x][y] == 0: maze[x][y] = 2
+    else:
+        maze_to_grid(grid, maze)
+        solve_grid(grid, x, y)
+        grid_to_maze(grid, maze)

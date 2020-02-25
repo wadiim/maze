@@ -1,4 +1,4 @@
-from maze import Shape, get_shape, cell_to_string, maze_to_string
+from maze import Shape, get_shape, cell_to_string, maze_to_string, solve_maze
 import unittest
 
 class GetShapeTest(unittest.TestCase):
@@ -206,6 +206,78 @@ class MazeToStringTest(unittest.TestCase):
                " │     │                       │ \n"
                " └─────┴────────────────   ────┘ ")
         self.assertEqual(maze_to_string(maze), str)
+
+class SolveMazeTest(unittest.TestCase):
+
+    def test_horizontal_single_path(self):
+        maze =     [[1, 0, 1],
+                    [1, 0, 1],
+                    [1, 0, 1],
+                    [1, 0, 1],
+                    [1, 0, 1]]
+        solution = [[1, 2, 1],
+                    [1, 2, 1],
+                    [1, 2, 1],
+                    [1, 2, 1],
+                    [1, 2, 1]]
+        solve_maze(maze)
+        self.assertEqual(maze, solution)
+
+    def test_vertical_single_path(self):
+        maze =     [[1, 1, 1, 1, 1],
+                    [0, 0, 0, 0, 0],
+                    [1, 1, 1, 1, 1]]
+        solution = [[1, 1, 1, 1, 1],
+                    [2, 2, 2, 2, 2],
+                    [1, 1, 1, 1, 1]]
+        solve_maze(maze)
+        self.assertEqual(maze, solution)
+
+    def test_curved_path(self):
+        maze =     [[1, 1, 1, 1, 1],
+                    [0, 0, 1, 0, 0],
+                    [1, 0, 1, 0, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 1, 1, 1, 1]]
+        solution = [[1, 1, 1, 1, 1],
+                    [2, 2, 1, 2, 2],
+                    [1, 2, 1, 2, 1],
+                    [1, 2, 2, 2, 1],
+                    [1, 1, 1, 1, 1]]
+        solve_maze(maze)
+        self.assertEqual(maze, solution)
+
+    def test_multiple_pathes(self):
+        maze =     [[1, 1, 1, 1, 1],
+                    [0, 0, 0, 0, 1],
+                    [1, 0, 1, 1, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 0, 1, 1, 1]]
+        solution = [[1, 1, 1, 1, 1],
+                    [2, 2, 0, 0, 1],
+                    [1, 2, 1, 1, 1],
+                    [1, 2, 0, 0, 1],
+                    [1, 2, 1, 1, 1]]
+        solve_maze(maze)
+        self.assertEqual(maze, solution)
+
+    def test_complex_maze(self):
+        maze =     [[1, 1, 1, 1, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0, 0],
+                    [1, 1, 1, 0, 1, 1, 1],
+                    [1, 0, 1, 0, 0, 0, 1],
+                    [1, 0, 1, 1, 1, 0, 1],
+                    [1, 0, 0, 0, 0, 0, 1],
+                    [1, 0, 1, 1, 1, 1, 1]]
+        solution = [[1, 1, 1, 1, 1, 1, 1],
+                    [1, 0, 0, 2, 2, 2, 2],
+                    [1, 1, 1, 2, 1, 1, 1],
+                    [1, 0, 1, 2, 2, 2, 1],
+                    [1, 0, 1, 1, 1, 2, 1],
+                    [1, 2, 2, 2, 2, 2, 1],
+                    [1, 2, 1, 1, 1, 1, 1]]
+        solve_maze(maze, 2, 0)
+        self.assertEqual(maze, solution)
 
 if __name__ == '__main__':
     unittest.main()
