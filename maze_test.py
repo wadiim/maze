@@ -301,7 +301,7 @@ class SolveMazeTest(unittest.TestCase):
                     [1, 0, 1, 1, 1, 2, 1],
                     [1, 2, 2, 2, 2, 2, 1],
                     [1, 2, 1, 1, 1, 1, 1]]
-        solve_maze(maze, 2, 0)
+        solve_maze(maze)
         self.assertEqual(maze, solution)
 
 if __name__ == '__main__':

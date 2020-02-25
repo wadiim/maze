@@ -158,7 +158,18 @@ def solve_grid(grid, x = 0, y = 0):
             return True
     return False
 
-def solve_maze(maze, x = 0, y = 0):
+def find_entry(maze):
+    cols = len(maze)
+    rows = len(maze[0])
+
+    for x in range(rows):
+        if maze[x][0] == 0: return (x, 0)
+        if maze[x][-1] == 0: return (x, cols - 1)
+    for y in range(cols):
+        if maze[0][y] == 0: return (0, y)
+        if maze[-1][y] == 0: return (rows - 1, y)
+
+def solve_maze(maze):
     grid = [[Cell() for i in range(1, len(maze[0]), 2)]
         for j in range(1, len(maze), 2)]
     if len(grid[0]) == 1 or len(grid) == 1:
@@ -167,5 +178,7 @@ def solve_maze(maze, x = 0, y = 0):
                 if maze[x][y] == 0: maze[x][y] = 2
     else:
         maze_to_grid(grid, maze)
+        x, y = find_entry(maze)
+        x, y = ((x - 1) if x else x) // 2, ((y - 1) if y else y) // 2
         solve_grid(grid, x, y)
         grid_to_maze(grid, maze)
