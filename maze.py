@@ -199,7 +199,7 @@ def parse_args():
         metavar = ('rows', 'cols'),
         help = 'generate maze')
     parser.add_argument("--pretty", help = 'pretty-print the results',
-                        action="store_true")
+        action="store_true")
     return parser.parse_args()
 
 def main():
