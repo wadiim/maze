@@ -32,18 +32,18 @@ class Cell:
 def get_shape(maze, x, y):
     val = maze[x][y]
     shape = Shape()
-    cols = len(maze)
-    rows = len(maze[0])
+    rows = len(maze)
+    cols = len(maze[0])
 
     if x == 0 and y == 0: shape.up = shape.right = True
-    if x == 0 and y == rows - 1: shape.down = shape.right = True
-    if x == cols - 1 and y == 0: shape.up = shape.left = True
-    if x == cols - 1 and y == rows - 1: shape.down = shape.left = True
+    if x == 0 and y == cols - 1: shape.down = shape.right = True
+    if x == rows - 1 and y == 0: shape.up = shape.left = True
+    if x == rows - 1 and y == cols - 1: shape.down = shape.left = True
 
-    if y + 1 < rows and maze[x][y+1] == val: shape.up = True
+    if y + 1 < cols and maze[x][y+1] == val: shape.up = True
     if y > 0 and maze[x][y-1] == val: shape.down = True
     if x > 0 and maze[x-1][y] == val: shape.left = True
-    if x + 1 < cols and maze[x+1][y] == val: shape.right = True
+    if x + 1 < rows and maze[x+1][y] == val: shape.right = True
 
     return shape
 
@@ -68,12 +68,12 @@ def cell_to_string(maze, x, y):
     if shape.left or shape.right: return '───'
 
 def maze_to_string(maze):
-    cols = len(maze)
-    rows = len(maze[0])
+    rows = len(maze)
+    cols = len(maze[0])
 
     return '\n'.join([''.join([str(cell_to_string(maze, x, y))
-           for x in range(cols)])
-           for y in range(rows-1, -1, -1)])
+           for x in range(rows)])
+           for y in range(cols-1, -1, -1)])
 
 def is_valid(grid, x, y):
     return (x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0]) and
@@ -99,10 +99,10 @@ def grid_cell_to_maze_cell(grid, maze, x, y):
         dx, dy = Cell.directions[key]
         if grid[x][y].walls[key]: continue
         if (grid[x][y].path and
-            ((mx + dx == 0 or mx + dx == len(maze[0]) - 1 or
-            my + dy == 0 or my + dy == len(maze) - 1) or
-            (x + dx >= 0 and x + dx < len(grid[0]) and
-            y + dy >= 0 and y + dy < len(grid) and
+            ((mx + dx == 0 or mx + dx == len(maze) - 1 or
+            my + dy == 0 or my + dy == len(maze[0]) - 1) or
+            (x + dx >= 0 and x + dx < len(grid) and
+            y + dy >= 0 and y + dy < len(grid[0]) and
             grid[x + dx][y + dy].path))): maze[mx + dx][my + dy] = 2
         else: maze[mx + dx][my + dy] = 0
 
@@ -113,10 +113,10 @@ def maze_cell_to_grid_cell(grid, maze, x, y):
         grid[x][y].walls[key] = False
 
 def for_each_grid_cell(grid, func, *args):
-    cols = len(grid)
-    rows = len(grid[0])
-    for i in range(cols):
-        for j in range(rows): func(i, j, *args)
+    rows = len(grid)
+    cols = len(grid[0])
+    for i in range(rows):
+        for j in range(cols): func(i, j, *args)
 
 def grid_to_maze(grid, maze):
     for_each_grid_cell(grid,
@@ -142,9 +142,9 @@ def generate_maze(rows, cols):
 def is_exit(grid, x, y):
     return (is_valid(grid, x, y) and
             x == 0 and not grid[x][y].walls['W'] or
-            x == len(grid[0]) - 1 and not grid[x][y].walls['E'] or
+            x == len(grid) - 1 and not grid[x][y].walls['E'] or
             y == 0 and not grid[x][y].walls['S'] or
-            y == len(grid) - 1 and not grid[x][y].walls['N'])
+            y == len(grid[0]) - 1 and not grid[x][y].walls['N'])
 
 def solve_grid(grid, x = 0, y = 0):
     grid[x][y].visited = True
@@ -163,8 +163,8 @@ def solve_grid(grid, x = 0, y = 0):
     return False
 
 def find_entry(maze):
-    cols = len(maze)
-    rows = len(maze[0])
+    rows = len(maze)
+    cols = len(maze[0])
 
     for x in range(rows):
         if maze[x][0] == 0: return (x, 0)
