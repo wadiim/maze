@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import random
+import argparse
 
 class Shape:
 
@@ -182,3 +183,15 @@ def solve_maze(maze):
         x, y = ((x - 1) if x else x) // 2, ((y - 1) if y else y) // 2
         solve_grid(grid, x, y)
         grid_to_maze(grid, maze)
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-s', '--solve', action = 'store_true',
+        help = 'solve maze')
+    group.add_argument('-g', '--generate', type = int, nargs = 2,
+        metavar = ('rows', 'cols'),
+        help = 'generate maze')
+    parser.add_argument("--pretty", help = 'pretty-print the results',
+                        action="store_true")
+    return parser.parse_args()
