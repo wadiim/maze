@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+import sys
 import random
 import argparse
+
+if sys.version[0] == '2': input = raw_input
 
 class Shape:
 
@@ -184,6 +187,9 @@ def solve_maze(maze):
         solve_grid(grid, x, y)
         grid_to_maze(grid, maze)
 
+def print_maze(maze):
+    print('\n'.join([''.join([str(i) for i in row]) for row in maze]))
+
 def parse_args():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
@@ -195,3 +201,24 @@ def parse_args():
     parser.add_argument("--pretty", help = 'pretty-print the results',
                         action="store_true")
     return parser.parse_args()
+
+def main():
+    args = parse_args()
+    if args.generate:
+        rows, cols = args.generate;
+        if args.pretty: print(maze_to_string(generate_maze(rows, cols)))
+        else: print_maze(generate_maze(cols, rows))
+    else:
+        maze = []
+        try:
+            line = ''
+            while True:
+                line = input()
+                maze.append([int(i) for i in line])
+        except EOFError: pass
+        if args.solve: solve_maze(maze)
+        if args.pretty: print(maze_to_string(maze))
+        else: print_maze(maze)
+
+if __name__ == '__main__':
+	main()
