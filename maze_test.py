@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from maze import Shape, get_shape, cell_to_string, maze_to_string, solve_maze
 import unittest
 
