@@ -1,8 +1,10 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/33803413/75342751-51913c00-5897-11ea-8022-5f6864f12a4d.png">
+</p>
+
 # Maze
 
 A maze solver and generator.
-
-![](https://user-images.githubusercontent.com/33803413/75342751-51913c00-5897-11ea-8022-5f6864f12a4d.png)
 
 ## Usage
 
